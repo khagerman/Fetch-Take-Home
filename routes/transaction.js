@@ -25,14 +25,10 @@ router.get("/", async function (req, res, next) {
   }
 }); // end
 
-/** GET /[username]
- *
- * Get details on a user. Only logged-in users should be able to use this.
- *
- * It should return:
- *     {user: {username, first_name, last_name, phone, email}}
- *
- * If user cannot be found, return a 404 err.
+/** POST /
+ * create new transaction
+ * returns newly created transaction
+
  *
  */
 
