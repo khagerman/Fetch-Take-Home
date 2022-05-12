@@ -1,10 +1,18 @@
+const transactions = require("./fakeDb");
+class Transaction {
+  static async getAll() {
+    return transactions;
+  }
+  static async create(payer, points) {
+    let newTransaction = {
+      payer: payer,
+      points: points,
+      timestamp: new Date().toISOString(),
+    };
+    transactions.push(newTransaction);
+    return transactions;
+  }
 
-class Transaction{
-
-static async create(payer, points, timestamp){
-let newTransaction(){
-    
+  static async spend(points) {}
 }
-}
-
-}
+module.exports = Transaction;

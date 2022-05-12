@@ -1,0 +1,48 @@
+const Transaction = require("../models/transaction");
+const express = require("express");
+const router = new express.Router();
+const ExpressError = require("../helpers/expressError");
+
+/** GET /
+ *
+ * Get list of all transactions.
+ *
+ * It should return an array of transactions
+ * [{ "payer": "DANNON", "points": 1000, "timestamp": "2020-11-02T14:00:00Z"},
+                             { "payer": "UNILEVER", "points": 200, "timestamp": "2020-10-31T11:00:00Z" },
+ { "payer": "DANNON", "points": -200, "timestamp": "2020-10-31T15:00:00Z" },
+ { "payer": "MILLER COORS", "points": 10000, "timestamp": "2020-11-01T14:00:00Z" },
+{ "payer": "DANNON", "points": 300, "timestamp": "2020-10-31T10:00:00Z" }]
+ *
+ */
+
+router.get("/", async function (req, res, next) {
+  try {
+    let users = await Transaction.getAll();
+    return res.json({ users });
+  } catch (err) {
+    return next(err);
+  }
+}); // end
+
+/** GET /[username]
+ *
+ * Get details on a user. Only logged-in users should be able to use this.
+ *
+ * It should return:
+ *     {user: {username, first_name, last_name, phone, email}}
+ *
+ * If user cannot be found, return a 404 err.
+ *
+ */
+
+router.post("/", (req, res, next) => {
+  try {
+    let newTransaction = Transaction.create(req.body.payer, req.body.points);
+    return res.json({ newTransaction });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+module.exports = router;
