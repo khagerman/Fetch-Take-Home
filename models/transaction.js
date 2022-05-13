@@ -1,4 +1,5 @@
 const transactions = require("../fakeDB");
+
 class Transaction {
   static async getAll() {
     return transactions;
@@ -6,11 +7,11 @@ class Transaction {
   static async create(payer, points) {
     let newTransaction = {
       payer: payer,
-      points: points,
+      points: +points,
       timestamp: new Date().toISOString(),
     };
     transactions.push(newTransaction);
-    return transactions;
+    return newTransaction;
   }
 
   static async spend(points) {}

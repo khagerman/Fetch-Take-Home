@@ -19,7 +19,7 @@ const ExpressError = require("../helpers/expressError");
 router.get("/", async function (req, res, next) {
   try {
     let transactions = await Transaction.getAll();
-    return res.json({ transactions });
+    return res.json(transactions);
   } catch (err) {
     return next(err);
   }
@@ -32,13 +32,17 @@ router.get("/", async function (req, res, next) {
  *
  */
 
-router.post("/", (req, res, next) => {
+router.post("/", async function (req, res, next) {
   try {
-    let newTransaction = Transaction.create(req.body.payer, req.body.points);
-    return res.json({ newTransaction });
+    console.log(res.body.payer);
+    let newTransaction = await Transaction.create(
+      req.body.payer,
+      +req.body.points
+    );
+    return res.json(newTransaction);
   } catch (err) {
     return next(err);
   }
 });
-
+//todo use points Patch??
 module.exports = router;
