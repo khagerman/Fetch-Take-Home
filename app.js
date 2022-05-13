@@ -1,13 +1,10 @@
 const express = require("express");
-
+const app = express();
 app.use(express.json());
 
 /** routes */
 
-const transactionsRoutes = require("./routes/transactions");
+const transactionsRoutes = require("./routes/transaction");
 
 app.use("/transactions", transactionsRoutes);
-
-app.listen(3000, function () {
-  console.log("Server is listening on port 3000");
-});
+module.exports = app;

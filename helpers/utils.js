@@ -4,7 +4,7 @@
 //get oldest time
 
 //check if enough points
-const transactions = require("../fakeDb");
+const transactions = require("../fakeDB");
 
 function getOldest(transactions) {
   transactions.map((p) => p.timestamp.getTime()).sort((a, b) => a - b);
@@ -27,6 +27,7 @@ function totalPerCompany() {
     transactions.filter((t) => t.payer === payers[key]);
   }
 }
+///todo update db
 function usePoints(points) {
   //   let samePayer = transactions.filter((t) => t.payer === payer);
   let sorted = getOldest(transactions);

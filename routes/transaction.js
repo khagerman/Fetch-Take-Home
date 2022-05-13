@@ -18,8 +18,8 @@ const ExpressError = require("../helpers/expressError");
 
 router.get("/", async function (req, res, next) {
   try {
-    let users = await Transaction.getAll();
-    return res.json({ users });
+    let transactions = await Transaction.getAll();
+    return res.json({ transactions });
   } catch (err) {
     return next(err);
   }

@@ -1,4 +1,4 @@
-const transactions = require("./fakeDb");
+const transactions = require("../fakeDB");
 class Transaction {
   static async getAll() {
     return transactions;
