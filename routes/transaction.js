@@ -2,7 +2,7 @@ const Transaction = require("../models/transaction");
 const express = require("express");
 const router = new express.Router();
 const ExpressError = require("../helpers/expressError");
-
+// const  = "../helpers/helperFunctions";
 /** GET /
  *
  * Get list of all transactions.
@@ -16,6 +16,7 @@ const ExpressError = require("../helpers/expressError");
  *
  */
 
+// todo: error handling
 router.get("/", async function (req, res, next) {
   try {
     let transactions = await Transaction.getAll();
@@ -23,8 +24,25 @@ router.get("/", async function (req, res, next) {
   } catch (err) {
     return next(err);
   }
-}); // end
+});
+/** GET /
+ *
+ * Get total of points per payer
+ * {"DANNON":200,
+ * "CHEESE R' US": 0,
+ * "MILLER COORS":1000
+ * }
+ *does not return negative values
+ */
 
+router.get("/points", async function (req, res, next) {
+  try {
+    let total = await Transaction.getTotal();
+    return res.json(total);
+  } catch (err) {
+    return next(err);
+  }
+});
 /** POST /
  * create new transaction
  * returns newly created transaction
@@ -34,7 +52,6 @@ router.get("/", async function (req, res, next) {
 
 router.post("/", async function (req, res, next) {
   try {
-    console.log(res.body.payer);
     let newTransaction = await Transaction.create(
       req.body.payer,
       +req.body.points
@@ -44,5 +61,19 @@ router.post("/", async function (req, res, next) {
     return next(err);
   }
 });
-//todo use points Patch??
+/** POST /
+ * use points
+ * returns record of points used by payer
+
+ *
+ */
+router.post("/points", async function (req, res, next) {
+  try {
+    let transactions = await Transaction.spend(+req.points);
+    return res.json(transactions);
+  } catch (err) {
+    return next(err);
+  }
+}); // end
+
 module.exports = router;
