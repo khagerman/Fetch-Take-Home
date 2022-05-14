@@ -43,26 +43,29 @@ function usePoints(points) {
 
   let pointsRemaining = +points;
   console.log(points, "pointsRemaining");
-  while (pointsRemaining >= 0) {
+  while (pointsRemaining > 0) {
     for (let transaction of sorted) {
       console.log(transaction, "JFJF");
       if (transaction.points >= pointsRemaining) {
         //todo fix
         let amountSubtracted = transaction.points - pointsRemaining;
-        pointsRemaining = pointsRemaining - amountSubtracted;
+
         //add to subtracted amounts and make negative to notify you took away
         subtractedAmounts[transaction.payer] =
-          (subtractedAmounts[transaction.payer] += amountSubtracted * -1) ||
-          amountSubtracted * -1;
+          (subtractedAmounts[transaction.payer] +=
+            -Math.abs(pointsRemaining)) || -Math.abs(pointsRemaining);
+        pointsRemaining = 0;
+        break;
       } else if (
         transaction.points < pointsRemaining &&
-        transaction.points > 0
+        (transaction.points > 0) & (pointsRemaining > 0)
       ) {
         pointsRemaining = pointsRemaining - transaction.points;
 
         subtractedAmounts[transaction.payer] =
-          (subtractedAmounts[transaction.payer] += transaction.points * -1) ||
-          amountSubtracted * -1;
+          (subtractedAmounts[transaction.payer] += -Math.abs(
+            transaction.points
+          )) || -Math.abs(transaction.points);
       }
     }
   }

@@ -45,6 +45,7 @@ router.get("/total", async function (req, res, next) {
 });
 /** POST /
  * create new transaction
+ * throws error if missing values
  * returns newly created transaction
 
  *
@@ -52,6 +53,9 @@ router.get("/total", async function (req, res, next) {
 
 router.post("/", async function (req, res, next) {
   try {
+    if (!req.body.payer) throw new ExpressError("No payer given!", 400);
+    if (!req.body.points || isNaN(+req.body.points))
+      throw new ExpressError("Points were not given or are not valid!", 400);
     let newTransaction = await Transaction.create(
       req.body.payer,
       +req.body.points
@@ -61,7 +65,9 @@ router.post("/", async function (req, res, next) {
     return next(err);
   }
 });
-/** POST /
+
+// todo new route?
+/** POST /spend
  * use points
  * returns record of points used by payer
 
@@ -69,7 +75,9 @@ router.post("/", async function (req, res, next) {
  */
 router.post("/spend", async function (req, res, next) {
   try {
-    let transactions = await Transaction.spend(req.body.points);
+    if (!req.body.points || isNaN(+req.body.points))
+      throw new ExpressError("Points were not given or are not valid!", 400);
+    let transactions = await Transaction.spend(+req.body.points);
     return res.json(transactions);
   } catch (err) {
     return next(err);
