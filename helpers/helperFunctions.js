@@ -6,8 +6,11 @@
 //check if enough points
 const transactions = require("../fakeDB");
 
+//sort transactions by oldest to newest
 function getOldest(transactions) {
-  return transactions.sort((a, b) => a.timestamp - b.timestamp);
+  return transactions.sort(
+    (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
+  );
 }
 //get total amount of points for each payer
 //neeed to calculate total subtracted and return
@@ -29,30 +32,41 @@ function totalPerCompany() {
   }
   return payers;
 }
-///todo update db
+
 //use points starting with oldest transaction first
+
 function usePoints(points) {
   //keep track of subtacting amounts in object to return
   let subtractedAmounts = {};
+
   let sorted = getOldest(transactions);
-  let pointsRemaining = points;
+
+  let pointsRemaining = +points;
+  console.log(points, "pointsRemaining");
   while (pointsRemaining >= 0) {
     for (let transaction of sorted) {
+      console.log(transaction, "JFJF");
       if (transaction.points >= pointsRemaining) {
+        //todo fix
         let amountSubtracted = transaction.points - pointsRemaining;
         pointsRemaining = pointsRemaining - amountSubtracted;
         //add to subtracted amounts and make negative to notify you took away
         subtractedAmounts[transaction.payer] =
           (subtractedAmounts[transaction.payer] += amountSubtracted * -1) ||
           amountSubtracted * -1;
-      } else if (transaction.points < points && transaction.points > 0) {
-        let amountSubtracted = pointsRemaining - transaction.points;
+      } else if (
+        transaction.points < pointsRemaining &&
+        transaction.points > 0
+      ) {
+        pointsRemaining = pointsRemaining - transaction.points;
+
         subtractedAmounts[transaction.payer] =
-          (subtractedAmounts[transaction.payer] += amountSubtracted * -1) ||
+          (subtractedAmounts[transaction.payer] += transaction.points * -1) ||
           amountSubtracted * -1;
       }
     }
   }
+  console.log(subtractedAmounts, "subtracted");
   return subtractedAmounts;
 }
 

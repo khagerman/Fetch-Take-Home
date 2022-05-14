@@ -25,7 +25,7 @@ router.get("/", async function (req, res, next) {
     return next(err);
   }
 });
-/** GET /
+/** GET /total
  *
  * Get total of points per payer
  * {"DANNON":200,
@@ -35,7 +35,7 @@ router.get("/", async function (req, res, next) {
  *does not return negative values
  */
 
-router.get("/points", async function (req, res, next) {
+router.get("/total", async function (req, res, next) {
   try {
     let total = await Transaction.getTotal();
     return res.json(total);
@@ -67,13 +67,13 @@ router.post("/", async function (req, res, next) {
 
  *
  */
-router.post("/points", async function (req, res, next) {
+router.post("/spend", async function (req, res, next) {
   try {
-    let transactions = await Transaction.spend(+req.points);
+    let transactions = await Transaction.spend(req.body.points);
     return res.json(transactions);
   } catch (err) {
     return next(err);
   }
-}); // end
+});
 
 module.exports = router;
