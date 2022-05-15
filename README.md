@@ -24,7 +24,7 @@ Example Return:
 [
   { "payer": "DANNON", "points": 1000, "timestamp": "2020-11-02T14:00:00Z" },
   { "payer": "UNILEVER", "points": 200, "timestamp": "2020-10-31T11:00:00Z" },
-  { "payer": "DANNON", "points": -200, "timestamp": "2020-10-31T15:00:00Z" },
+
   {
     "payer": "MILLER COORS",
     "points": 10000,
@@ -38,8 +38,8 @@ Example Return:
 
     POST / { payer, points } => { transaction }
 
-_Create new transaction. User must include { payer, points }\
- Returns new transaction with {payer,points, timestamp}_
+_Create new transaction. User must include { payer, points }_
+Returns new transaction with {payer,points, timestamp}\_
 Example return:
 
 ```json
@@ -68,7 +68,7 @@ Example Return:
 
     POST /spend { points } => { transaction }
 
-_Spend points. Send {points: integer } Returns error if points is not a valid number or missing. Returns record of points used by payer_
+_Spend points. Send {points: integer } Returns error if points is not a valid number, missing, or if user does not have enough points. Returns record of points used by payer_
 Example Return:
 
 ```json
