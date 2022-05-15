@@ -40,7 +40,7 @@ if not enough points to use, returns error
     for (let key in remainingPoints) {
       totalPointsRemaining += remainingPoints[key];
     }
-    console.log(totalPointsRemaining);
+
     if (points > totalPointsRemaining) {
       throw new ExpressError("User does not have enough points!", 401);
     }
