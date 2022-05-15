@@ -34,7 +34,7 @@ function totalPerCompany() {
 }
 
 //use points starting with oldest transaction first
-
+// returns object of used points per payer
 function usePoints(points) {
   //keep track of subtacting amounts in object to return
   let subtractedAmounts = {};
@@ -47,7 +47,6 @@ function usePoints(points) {
     for (let transaction of sorted) {
       console.log(transaction, "JFJF");
       if (transaction.points >= pointsRemaining) {
-        //todo fix
         let amountSubtracted = transaction.points - pointsRemaining;
 
         //add to subtracted amounts and make negative to notify you took away
@@ -69,7 +68,7 @@ function usePoints(points) {
       }
     }
   }
-  console.log(subtractedAmounts, "subtracted");
+
   return subtractedAmounts;
 }
 

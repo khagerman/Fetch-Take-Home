@@ -16,7 +16,6 @@ const ExpressError = require("../helpers/expressError");
  *
  */
 
-// todo: error handling
 router.get("/", async function (req, res, next) {
   try {
     let transactions = await Transaction.getAll();
@@ -44,10 +43,18 @@ router.get("/total", async function (req, res, next) {
   }
 });
 /** POST /
- * create new transaction
+ * create new transaction with 
+ * {payer: string,
+ * points:integer
+ 
+ * }
  * throws error if missing values
  * returns newly created transaction
-
+{
+		"payer": "DANNON",
+		"points": 200,
+		"timestamp": "2022-05-14T22:16:03.460Z"
+	}
  *
  */
 
@@ -66,12 +73,18 @@ router.post("/", async function (req, res, next) {
   }
 });
 
-// todo new route?
 /** POST /spend
  * use points
+ * send 
+ * {points: integer
+ * }
+ * subtracts amounts from oldest transactions first
  * returns record of points used by payer
-
- *
+{
+	"UNILEVER": -200,
+	"DANNON": -800
+}
+ * if missing points or points is not valid returns error
  */
 router.post("/spend", async function (req, res, next) {
   try {

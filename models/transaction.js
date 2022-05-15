@@ -1,15 +1,10 @@
-const transactions = require("../fakeDB");
-//todo  better comments
-//todo fix spend
-//todo directions to  use
-//todo erorr handling, missing vals etc
 const { usePoints, totalPerCompany } = require("../helpers/helperFunctions");
 class Transaction {
   //get list of all transactions
   static async getAll() {
     return transactions;
   }
-  //use helper function to total points per payer
+  //use helper function to get total points per payer
   static async getTotal() {
     return totalPerCompany(transactions);
   }
@@ -29,8 +24,8 @@ class Transaction {
 spend points, 
 helper function usePoints uses oldest points first 
 returns object with points used for each payer
-loops through points used for each payer and creates new transaction
-addes trsnsactions to db
+loops through points used for each payer and creates new transaction (with points subtracted)
+adds trsnsactions to db
 */
   static async spend(points) {
     let pointsUsed = usePoints(points);
