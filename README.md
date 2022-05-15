@@ -1,5 +1,7 @@
 Fetch Rewards Point Transaction API
 
+Fetch users users have points in their accounts and users only see a single point balance in their accounts. But for reporting purposes Fetch actually tracks their points per payer/partner (such as Dannon or Miller Coors). In the Fetch system, each transaction record contains: payer (string), points (integer), timestamp (date). For earning points it is easy to assign a payer, Fetch knows which actions earned the points. And thus which partner should be paying for the points. When a user spends points, they don't know or care which payer the points come from. But, the Fetch accounting team does care how the points are spent. There are two rules for determining what points to "spend" first: points cannot be negative and oldest points should be spent first (oldest based on transaction timestamp, not the order they’re received)
+
 ## To run this code locally:
 
 -Clone repository or download above
@@ -58,22 +60,19 @@ _Get list of all total points per payer. It should return an array of payers wit
 Example Return:
 
 ```json
-`{"DANNON":200,
- "CHEESE R' US": 0,
- "MILLER COORS":1000
- }`
+{ "DANNON": 200, "CHEESE R' US": 0, "MILLER COORS": 1000 }
 ```
 
 ---
 
     POST /spend { points } => { transaction }
 
-_Spend points. Send {points: integer } Returns error if points is not a valid number, missing, or if user does not have enough points. Returns record of points used by payer_
-Example Return:
+_Spend points in order of oldest to newest. Send {points: integer } Returns error if points is not a valid number, missing, or if user does not have enough points. Returns record of points used by payer_
+Example Return (after user used 1000 points)
 
 ```json
-`{
-	"UNILEVER": -200,
-	"DANNON": -800
-}`
+{
+  "UNILEVER": -200,
+  "DANNON": -800
+}
 ```
