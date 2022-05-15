@@ -35,20 +35,29 @@ function totalPerCompany() {
 
 //use points starting with oldest transaction first
 // returns object of used points per payer
+
 function usePoints(points) {
   //keep track of subtacting amounts in object to return
   let subtractedAmounts = {};
 
   let sorted = getOldest(transactions);
-
+  //keep track of how many points remain
   let pointsRemaining = +points;
-  console.log(points, "pointsRemaining");
+
   while (pointsRemaining > 0) {
     for (let transaction of sorted) {
-      console.log(transaction, "JFJF");
-      if (transaction.points >= pointsRemaining) {
+      //check if has used key on object
+      if (!transaction?.used) {
+        transaction.used = 0;
+      }
+      //check if points in this transaction is greater than points being spent and it has not been totaly used
+      if (
+        transaction.points - transaction.used >= pointsRemaining &&
+        transaction.used !== transaction.points
+      ) {
         let amountSubtracted = transaction.points - pointsRemaining;
-
+        transaction.used = transaction.used +=
+          transaction.points - amountSubtracted;
         //add to subtracted amounts and make negative to notify you took away
         subtractedAmounts[transaction.payer] =
           (subtractedAmounts[transaction.payer] +=
@@ -57,10 +66,13 @@ function usePoints(points) {
         break;
       } else if (
         transaction.points < pointsRemaining &&
-        (transaction.points > 0) & (pointsRemaining > 0)
+        transaction.points > 0 &&
+        pointsRemaining > 0 &&
+        transaction.used !== transaction.points
       ) {
         pointsRemaining = pointsRemaining - transaction.points;
-
+        //add amount used to transaction.use so we do not reuse points
+        transaction.used += transaction.points - transaction.used;
         subtractedAmounts[transaction.payer] =
           (subtractedAmounts[transaction.payer] += -Math.abs(
             transaction.points
@@ -68,6 +80,7 @@ function usePoints(points) {
       }
     }
   }
+  // return subtracted amounts
 
   return subtractedAmounts;
 }

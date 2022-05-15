@@ -1,4 +1,7 @@
 const { usePoints, totalPerCompany } = require("../helpers/helperFunctions");
+const transactions = require("../fakeDB");
+const ExpressError = require("../helpers/ExpressError");
+//ORM type model for transactio ns, a real one would have SQL requests
 class Transaction {
   //get list of all transactions
   static async getAll() {
@@ -26,10 +29,24 @@ helper function usePoints uses oldest points first
 returns object with points used for each payer
 loops through points used for each payer and creates new transaction (with points subtracted)
 adds trsnsactions to db
+if not enough points to use, returns error
 */
+
   static async spend(points) {
+    // check if enough points in account
+    let remainingPoints = await Transaction.getTotal();
+    let totalPointsRemaining = 0;
+    //get total amount of points
+    for (let key in remainingPoints) {
+      totalPointsRemaining += remainingPoints[key];
+    }
+    console.log(totalPointsRemaining);
+    if (points > totalPointsRemaining) {
+      throw new ExpressError("User does not have enough points!", 401);
+    }
+
     let pointsUsed = usePoints(points);
-    console.log(pointsUsed, "points");
+
     //loop through subtracted amounts, add new  transaction to list of transaction
     for (let key in pointsUsed) {
       let newTransaction = {
