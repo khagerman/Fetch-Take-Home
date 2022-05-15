@@ -1,7 +1,6 @@
 // We want the oldest points to be spent first
 // (oldest based on transaction timestamp, not the order they’re received)
 //  We want no payer's points to go negative.
-//get oldest time
 
 //check if enough points
 const transactions = require("../fakeDB");
@@ -37,20 +36,21 @@ function totalPerCompany() {
 // returns object of used points per payer
 
 function usePoints(points) {
-  //keep track of subtacting amounts in object to return
+  //keep track of used point amounts in object to return
   let subtractedAmounts = {};
 
   let sorted = getOldest(transactions);
   //keep track of how many points remain
   let pointsRemaining = +points;
 
+  //while there are still points
   while (pointsRemaining > 0) {
     for (let transaction of sorted) {
       //check if has used key on object
       if (!transaction?.used) {
         transaction.used = 0;
       }
-      //check if points in this transaction is greater than points being spent and it has not been totaly used
+      //check if points in this transaction is greater than points being spent and the points have not been totaly used
       if (
         transaction.points - transaction.used >= pointsRemaining &&
         transaction.used !== transaction.points
@@ -91,9 +91,3 @@ module.exports = {
   totalPerCompany,
   usePoints,
 };
-//go through amounts starting with oldest
-// if amount is less than total, subtract it
-//set equal to 0
-//push amount subtracted into object payer:company
-
-//go through and remove 0 amounts?

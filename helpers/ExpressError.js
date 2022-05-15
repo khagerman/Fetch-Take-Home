@@ -1,4 +1,4 @@
-/** ExpressError uses Javascript Error to return what is wrong with the route
+/** ExpressError uses Javascript Error to return error messages based on what is wrong
  *
  *  The error-handling middleware will return this.
  */

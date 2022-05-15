@@ -1,7 +1,7 @@
 const { usePoints, totalPerCompany } = require("../helpers/helperFunctions");
 const transactions = require("../fakeDB");
 const ExpressError = require("../helpers/ExpressError");
-//ORM type model for transactio ns, a real one would have SQL requests
+//ORM type model for transactions, a real ORM like this would have SQL requests to DB
 class Transaction {
   //get list of all transactions
   static async getAll() {
@@ -42,7 +42,7 @@ if not enough points to use, returns error
     }
 
     if (points > totalPointsRemaining) {
-      throw new ExpressError("User does not have enough points!", 401);
+      throw new ExpressError("User does not have enough points!", 400);
     }
 
     let pointsUsed = usePoints(points);
@@ -57,6 +57,7 @@ if not enough points to use, returns error
 
       transactions.push(newTransaction);
     }
+    //return object wuth amounts used for each payer
     return pointsUsed;
   }
 }
